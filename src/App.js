@@ -1,4 +1,5 @@
 import "./App.css";
+import Task from "./app/Task";
 import AddPostForm from "./features/posts/AddPostForm";
 import PostsList from "./features/posts/PostsList";
 
@@ -7,6 +8,7 @@ function App() {
     <div className="App">
       <PostsList />
       <AddPostForm />
+      <Task />
     </div>
   );
 }
