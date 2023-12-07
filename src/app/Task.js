@@ -7,7 +7,7 @@ const Task = () => {
   const [myPassword, setMyPassword] = useState("");
   const [loginResponse, setLoginResponse] = useState(null);
   const [meterList, setMeterList] = useState(null);
-  const [readings, setReadings] = useState(null);
+  const [meteringpoint, setMeteringpoint] = useState(null);
 
   // LOGIN FUNCTION
   const login = async () => {
@@ -16,7 +16,7 @@ const Task = () => {
         email: "takehome@metiundo.io",
         password: "Vm91Y2hlckZvckltbWVkaWF0ZUhpcmUK",
       });
-      console.log(response.data.tokens.accessToken);
+      console.log(response.data);
       setLoginResponse(response.data);
     } catch (error) {
       console.error("Login Error:", error.message);
@@ -29,7 +29,6 @@ const Task = () => {
   const getMeterList = async () => {
     try {
       if (!loginResponse || !loginResponse.tokens.accessToken) {
-        // If the login hasn't been performed or the access token is not available, perform login
         await login();
       }
 
@@ -47,16 +46,15 @@ const Task = () => {
     }
   };
 
-  // GET READINGS FUNCTION
-  const getReadings = async (meterUuid) => {
+  // GET Metering Point FUNCTION
+  const getMeteringpoint = async (meterUuid) => {
     try {
       if (!loginResponse || !loginResponse.tokens.accessToken) {
-        // If the login hasn't been performed or the access token is not available, perform login
         await login();
       }
 
       const response = await axios.get(
-        `${baseUrl}/meteringpoints/${meterUuid}/readings?from=${meterList.firstReading.readingTime}&to=${meterList.lastReading.readingTime}`,
+        `${baseUrl}/meteringpoints/${meterUuid}`,
         {
           headers: {
             Authorization: `Bearer ${loginResponse.tokens.accessToken}`,
@@ -64,18 +62,18 @@ const Task = () => {
         }
       );
 
-      console.log("Readings Response:", response.data);
-      setReadings(response.data);
+      console.log("Metering Point Response:", response.data);
+      setMeteringpoint(response.data);
     } catch (error) {
-      console.error("Readings Error:", error.message);
-      setReadings(null);
+      console.error("Metering Point Error:", error.message);
+      setMeteringpoint(null);
     }
   };
 
   // CALL THE FUNCTIONS ON LOAD
   useEffect(() => {
     getMeterList();
-  }, [loginResponse]); // Make sure to trigger the function when loginResponse changes
+  }, [loginResponse]);
 
   return (
     <div>
@@ -107,8 +105,8 @@ const Task = () => {
             {meterList.map((meter) => (
               <li key={meter.uuid}>
                 {meter.uuid}{" "}
-                <button onClick={() => getReadings(meter.uuid)}>
-                  Get Readings
+                <button onClick={() => getMeteringpoint(meter.uuid)}>
+                  Get Metering Point
                 </button>
               </li>
             ))}
@@ -116,11 +114,11 @@ const Task = () => {
         </div>
       )}
 
-      {readings && (
+      {meteringpoint && (
         <div>
-          <h3>Readings:</h3>
+          <h3>Metering Point:</h3>
           <ul>
-            {readings.map((reading) => (
+            {meteringpoint.map((reading) => (
               <li key={reading.readingTime}>
                 {reading.readingTime}: {reading.energyOut} kWh
               </li>
