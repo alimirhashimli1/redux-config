@@ -13,8 +13,14 @@ const AddPostFormPractice = () => {
 
   const onSavePostClick = () => {
     if (title && content) {
-      dispatch(postAdded(title, content, userId));
-      dispatch(setUserId(userId));
+      dispatch(
+        postAdded({
+          id: nanoid(),
+          title,
+          content,
+          userId,
+        })
+      );
       setTitle("");
       setContent("");
     }
