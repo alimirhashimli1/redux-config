@@ -54,6 +54,7 @@ const AddPostsForm = () => {
           onChange={(e) => setUserId(e.target.value)}
         >
           <option value=""></option>
+          {usersOptions}
         </select>
 
         <button type="button" onClick={onSavePostClicked} disabled={!canSave}>
