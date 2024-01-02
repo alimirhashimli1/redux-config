@@ -2,6 +2,7 @@ import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
 import axios from "axios";
 const POSTS_URL = "http://jsonplaceholder.typicode.com/posts";
+
 const initialState = {
   posts: [],
   status: "idle",
